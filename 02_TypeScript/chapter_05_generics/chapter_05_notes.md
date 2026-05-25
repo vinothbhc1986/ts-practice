@@ -123,7 +123,7 @@ const strings = map(numbers, n => n.toString());
 // Swap function
 function swap<T, U>(tuple: [T, U]): [U, T] {
   return [tuple[1], tuple[0]];
-}
+} 
 
 const swapped = swap(["hello", 42]);  // [42, "hello"]
 ```
@@ -131,14 +131,29 @@ const swapped = swap(["hello", 42]);  // [42, "hello"]
 ### 6. Default Type Parameters
 
 ```typescript
-interface Response<T = any> {
+interface ApiResponse<T = any> {
   data: T;
   status: number;
 }
 
-const response1: Response = { data: "anything", status: 200 };
-const response2: Response<User> = { data: user, status: 200 };
+interface User {
+  name: string;
+}
 
+const user: User = {
+  name: "John"
+};
+
+const response1: ApiResponse = {
+  data: "anything",
+  status: 200
+};
+
+const response2: ApiResponse<User> = {
+  data: user,
+  status: 200
+};
+///
 // Function with default
 function createArray<T = string>(length: number, value: T): T[] {
   return Array(length).fill(value);

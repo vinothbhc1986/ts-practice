@@ -89,9 +89,7 @@ console.log("Request:", request.method, request.url);
 // Solution 4: No Reverse Mapping
 console.log("\n--- No Reverse Mapping ---");
 
-// String enums don't have reverse mapping
 console.log("Direction.Up:", Direction.Up);
-// console.log("Direction['UP']:", Direction["UP"]); // Error!
 
 // Numeric enum comparison
 enum NumericDirection {

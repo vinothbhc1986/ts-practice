@@ -190,6 +190,9 @@ type WithoutAge = Omit<User, "age">;
 // Record - create object type
 type UserMap = Record<string, User>;
 ```
+const users: UserMap = {
+  emp101: { name: "John", age: 25 },
+};
 
 ### 8. Conditional Types
 

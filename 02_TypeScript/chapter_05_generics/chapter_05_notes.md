@@ -9,7 +9,7 @@ Generics allow you to write reusable code that works with multiple types while m
 
 ### 1. Generic Functions
 
-```typescript
+//typescript
 // Without generics - loses type info
 function identity(value: any): any {
   return value;
@@ -22,13 +22,13 @@ function identity<T>(value: T): T {
 
 // Usage
 const num = identity<number>(42);      // Type: number
-const str = identity<string>("hello"); // Type: string
+const str = identity("hello"); // Type: string
 const inferred = identity(true);       // Type: boolean (inferred)
-```
+//
 
 ### 2. Generic Interfaces
 
-```typescript
+//typescript
 interface Container<T> {
   value: T;
   getValue(): T;
@@ -48,11 +48,11 @@ interface Pair<K, V> {
 }
 
 const pair: Pair<string, number> = { key: "age", value: 30 };
-```
+//
 
 ### 3. Generic Classes
 
-```typescript
+//typescript
 class Stack<T> {
   private items: T[] = [];
   
@@ -80,11 +80,11 @@ numberStack.pop();  // 2
 
 const stringStack = new Stack<string>();
 stringStack.push("hello");
-```
+//
 
 ### 4. Generic Constraints
 
-```typescript
+//typescript
 // Constraint with extends
 interface HasLength {
   length: number;
@@ -107,11 +107,11 @@ function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
 const user = { name: "John", age: 30 };
 getProperty(user, "name");  // OK
 // getProperty(user, "email");  // Error - "email" not in user
-```
+//
 
 ### 5. Multiple Type Parameters
 
-```typescript
+//typescript
 function map<T, U>(array: T[], fn: (item: T) => U): U[] {
   return array.map(fn);
 }
@@ -126,11 +126,11 @@ function swap<T, U>(tuple: [T, U]): [U, T] {
 } 
 
 const swapped = swap(["hello", 42]);  // [42, "hello"]
-```
+//
 
 ### 6. Default Type Parameters
 
-```typescript
+//typescript
 interface ApiResponse<T = any> {
   data: T;
   status: number;
@@ -161,11 +161,11 @@ function createArray<T = string>(length: number, value: T): T[] {
 
 createArray(3, "x");  // string[]
 createArray<number>(3, 0);  // number[]
-```
+//
 
 ### 7. Generic Utility Types
 
-```typescript
+//typescript
 // Partial - all properties optional
 interface User {
   name: string;
@@ -189,50 +189,87 @@ type WithoutAge = Omit<User, "age">;
 
 // Record - create object type
 type UserMap = Record<string, User>;
-```
+//
 const users: UserMap = {
   emp101: { name: "John", age: 25 },
 };
 
 ### 8. Conditional Types
 
-```typescript
+//typescript
 // Basic conditional type
 type IsString<T> = T extends string ? true : false;
 
 type A = IsString<string>;  // true
 type B = IsString<number>;  // false
+ 
+ const a1: A = true;
+ const b1: B = false;
+
+
+
 
 // Extract and Exclude
+## keeps only the types from T that are also present in U
 type T1 = Extract<"a" | "b" | "c", "a" | "f">;  // "a"
+## removes types from T that are assignable to U
 type T2 = Exclude<"a" | "b" | "c", "a">;        // "b" | "c"
+const a: T1 = "a";
+const b: T2 = "b";
+
 
 // NonNullable
+## removes null and undefined from T
 type T3 = NonNullable<string | null | undefined>;  // string
+const a3: T3 = "hello";
+---
+interface ApiResponse {
+  username: string | null;
+}
 
+type SafeUsername = NonNullable<ApiResponse["username"]>;
+const user1: SafeUsername = "Vinoth"; 
+function printUsername(username: SafeUsername) {
+  console.log(username.toUpperCase());
+}
+
+printUsername(user1);
+---
 // ReturnType
 function getData() { return { id: 1, name: "John" }; }
 type DataType = ReturnType<typeof getData>;
 // { id: number; name: string; }
-```
+//
 
 ### 9. Mapped Types
 
-```typescript
+//typescript
 // Create readonly version
-type Readonly<T> = {
+<!-- type Readonly<T> = {
   readonly [P in keyof T]: T[P];
-};
+}; -->
+
+const r = { a: 1, b: 2 };
+const ro: Readonly<typeof r> = { a: 1, b: 2 };
+
 
 // Create optional version
 type Optional<T> = {
   [P in keyof T]?: T[P];
 };
 
+const o = { a: 1, b: 2 };
+const oo: Optional<typeof o> = { a: 1, b: 2 };
+
+
 // Create nullable version
 type Nullable<T> = {
   [P in keyof T]: T[P] | null;
 };
+
+const n = { a: 1, b: 2 };
+const no: Nullable<typeof n> = { a: 1, b: 2 };
+//
 
 // Practical example
 interface User {
@@ -241,10 +278,14 @@ interface User {
 }
 
 type ReadonlyUser = Readonly<User>;
+const readonlyUser: ReadonlyUser = { name: "John", age: 30 };
+// readonlyUser.name = "Jane";
 type OptionalUser = Optional<User>;
-```
+const optionalUser: OptionalUser = { name: "Jane" };
 
----
+//
+
+//
 
 ## 💻 Practice Exercises
 
@@ -269,9 +310,10 @@ type OptionalUser = Optional<User>;
 
 ## 📝 Quick Reference
 
-```typescript
+//typescript
 // Generic function
 function fn<T>(arg: T): T { }
+
 
 // Generic interface
 interface Box<T> { value: T; }
@@ -285,5 +327,5 @@ function fn<T extends HasLength>(arg: T) { }
 // Utility types
 Partial<T>  Required<T>  Readonly<T>
 Pick<T, K>  Omit<T, K>   Record<K, V>
-```
+//
 

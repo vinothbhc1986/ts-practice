@@ -77,12 +77,31 @@ function badProcess(data: any): any {
 }
 
 // Good: Use unknown and narrow
+// unknown forces you to check the type before using it
 function goodProcess(data: unknown): string {
     if (typeof data === "object" && data !== null && "value" in data) {
         return String((data as { value: unknown }).value);
     }
     return "";
 }
+
+console.log(goodProcess({ value: "hello" }));
+let value: unknown = "Hello World";
+if (typeof value === "string") {
+    console.log("Value is a string:", value);
+}
+
+
+try {
+  // some code
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message); // ✅ Narrowed to Error class
+  }
+}
+//If you are certain of the type, you can use the as keyword.
+let value1: unknown = 10;
+let doubled = (value1 as number) * 2; // ✅ Manual override
 
 // Good: Use generics
 function genericProcess<T extends { value: string }>(data: T): string {
@@ -99,6 +118,8 @@ function badGetUser(id: number): User {
     // Might return undefined but type says User
     return { id, name: "John", email: "john@example.com" };
 }
+
+const user1 = badGetUser(1);
 
 // Good: Explicit null handling
 function goodGetUser(id: number): User | null {
@@ -171,15 +192,36 @@ interface FullUser {
 
 // Pick what you need
 type PublicUser = Pick<FullUser, "id" | "name" | "email">;
+const publicUser: PublicUser = {
+    id: 1,
+    name: "John",
+    email: "john@example.com",
+};
 
 // Omit sensitive data
 type SafeUser = Omit<FullUser, "password">;
+const safeUser: SafeUser = {
+    id: 1,
+    name: "John",
+    email: "john@example.com",
+    createdAt: new Date(),
+};
 
 // Make all optional for updates
 type UserUpdate = Partial<FullUser>;
+const update: UserUpdate = {
+    name: "John Updated"
+};
 
 // Make all required
-type RequiredUser = Required<Partial<FullUser>>;
+type RequiredUser = FullUser;
+const requiredUser: RequiredUser = {
+    id: 1,
+    name: "John",
+    email: "john@example.com",
+    password: "password",
+    createdAt: new Date(),
+};
 
 console.log("Use Partial, Pick, Omit, Required");
 
@@ -228,6 +270,14 @@ function goodMerge<T extends object, U extends object>(a: T, b: U): T & U {
 
 const merged = goodMerge({ name: "John" }, { age: 30 });
 console.log("Merged:", merged);
+
+type A = { name: string };
+type B = { age: number };
+
+type C = A & B;
+
+const merged2: C = { name: "John", age: 30 };
+console.log("Merged 2:", merged2);
 
 // Solution 10: Summary Checklist
 console.log("\n--- Best Practices Checklist ---");

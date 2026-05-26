@@ -76,6 +76,8 @@ function throwError(message: string): never {
 async function fetchData(): Promise<string> {
   return "data";
 }
+const data = await fetchData();
+console.log(data);
 ```
 
 ### 4. Object Type Annotations
@@ -146,6 +148,7 @@ function processData(
 ): void {
   callback(data.toUpperCase());
 }
+const c = processData("hello", (result) => console.log(result));
 
 // Function type alias
 type GreetFunction = (name: string) => string;
@@ -161,8 +164,8 @@ id = "abc123";
 id = 123;
 
 // Union with null
-let name: string | null = null;
-name = "John";
+let nam: string | null = null;
+nam = "John";
 
 // Union in function parameters
 function printId(id: string | number): void {

@@ -63,6 +63,11 @@ function logMessage(message: string): void {
 }
 
 // Never return
+//Cannot hold any value.
+// Does not have a reachable end point.
+//  Functions that crash or loop forever.
+//  Functions that throw exceptions.
+
 function throwError(message: string): never {
   throw new Error(message);
 }
